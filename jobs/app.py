@@ -15,10 +15,10 @@ def open_connection():
 def execute_sql(sql, values=(), commit=False, single=False):
     connection = open_connnection()
     cursor = connection.execute(sql, values)
-    if commit = True:
+    if commit == True:
         results = connection.commit()
     else:
-        results = cursor.fetchone( if single else cursor.fetchall())
+        results = cursor.fetchone() if single else cursor.fetchall()
 
     cursor.close()
     return results
