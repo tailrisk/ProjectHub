@@ -3,7 +3,7 @@
   <h1>New Review</h1>
   <form method="post">
     <div class="field">
-      <label class="label">Job Title</label>
+      <label class="label">Project Title</label>
       <div class="control">
         <input class="input" type="text" name="title" id="title" required>
       </div>
@@ -44,7 +44,7 @@
         <button class="button is-link">Submit</button>
       </div>
       <div class="control">
-        <a href="{{ url_for('employer', employer_id=employer_id) }}" class="button is-text">Cancel</a>
+        <a href="{{ url_for('client', client_id=client_id) }}" class="button is-text">Cancel</a>
       </div>
     </div>
   </form>
