@@ -1,10 +1,19 @@
 import sqlite3
 import datetime
-from flask import Flask, render_template, g, request, redirect, url_for
+from flask import Flask, render_template, g, request, redirect, url_for, flash, redirect
+from config import Config
+from forms import LoginForm
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 PATH = 'projects.sqlite'
-#PATH = 'mvp-mysqldb.ckrwmj7t0hcw.us-east-1.rds.amazonaws.com'
+
 application = Flask(__name__)
+application.config.from_object(Config)
+db = SQLAlchemy(application)
+migrate = Migrate(application, db)
+
+import models
 
 def open_connection():
     connection = getattr(g, '_connection', None)
@@ -59,6 +68,15 @@ def review(client_id):
         execute_sql('INSERT INTO review (review, rating, title, date, status, client_id) VALUES (?, ?, ?, ?, ?, ?)', (review, rating, title, date, status, client_id), commit=True)
         return redirect(url_for('client', client_id=client_id))
     return render_template('review.html', client_id=client_id)
+
+@application.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect(url_for('projects'))
+    return render_template('login.html', title='Log In', form=form)
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
